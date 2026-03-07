@@ -5,7 +5,7 @@ function App() {
   return (
     <>
       <header>
-        <h1>Welcome to the TalendIDE App</h1>
+        <h1>Welcome to the TalentIDE App</h1>
         <SignedOut>
           <SignInButton />
           <SignUpButton />
