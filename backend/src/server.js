@@ -13,7 +13,7 @@ const __dirname = path.resolve();
 //middleware
 app.use(express.json());
 //credentials: true meaning server allows a browser to include cookie on request
-app.use(cors({origin: ENV.CORS_ORIGIN,credentials: true}));
+app.use(cors({origin: ENV.CLIENT_URL,credentials: true}));
 
 app.use("/api/inngest",serve({client:inngest,functions}))
 

@@ -5,7 +5,7 @@ import User from "../models/User.js";
 export const inngest = new Inngest({ id: "TalentIDE" });  
 
 const syncUser = inngest.createFunction(
-    { id: "sync-user", name: "Sync User" },        // ← added id
+    { id: "sync-user", name: "Sync User" },        
     { event: "clerk/user.created" },
     async ({ event }) => {
         await connectDB()
@@ -21,7 +21,7 @@ const syncUser = inngest.createFunction(
 )
 
 const deleteUserFromDB = inngest.createFunction(
-    { id: "delete-user", name: "Delete User From DB" },  // ← added id
+    { id: "delete-user", name: "Delete User From DB" },  
     { event: "clerk/user.deleted" },
     async ({ event }) => {
         await connectDB()
