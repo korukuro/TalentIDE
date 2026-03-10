@@ -1,4 +1,5 @@
 import {StreamChat} from "stream-chat";
+import { StreamClient } from "@stream-io/node-sdk";
 import { ENV } from "./env.js";
 
 const apiKey = ENV.STREAM_API_KEY;
@@ -8,7 +9,9 @@ if(!apiKey || !apiSecret){
     console.error("Stream API key and secret are required");
 }
 
-export const chatClient = StreamChat.getInstance(apiKey, apiSecret); 
+export const streamClient = new StreamClient(apiKey, apiSecret); // This will be user for video call
+
+export const chatClient = StreamChat.getInstance(apiKey, apiSecret); // This will be used for chat functionality
 
 export const upsertStreamUser = async (userData) => {  //userData should include id, name, and image and upsert means to update if the user already exists or insert if it doesn't
     try {

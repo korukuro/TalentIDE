@@ -24,6 +24,7 @@ const syncUser = inngest.createFunction(
             image:newUser.profileImage,
         });
     }
+    //todo send a welcome email to new users
 )
 
 const deleteUserFromDB = inngest.createFunction(
