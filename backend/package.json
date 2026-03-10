@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@clerk/express": "^1.7.41",
     "@clerk/react": "^6.0.1",
     "cors": "^2.8.5",
     "dotenv": "^17.3.1",
