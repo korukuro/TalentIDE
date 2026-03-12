@@ -14,7 +14,7 @@ export async function createSession(req, res) {
     }
 
     //generate unique call id for stream video call
-    const callId = `seassion_${Date.now()}_${Math.randon().toString(36).substring(7)}`;
+    const callId = `seassion_${Date.now()}_${Math.random().toString(36).substring(7)}`;
 
     //create session in database
     const session = await Session.create({
@@ -54,16 +54,13 @@ export async function createSession(req, res) {
 
 export async function getActiveSessions(req, res) {
   try {
-    const session = await Session.findOne({ status: "active" })
+    const sessions = await Session.find({ status: "active" })
       .populate("host", "name profileImage email clerkId")
+      .populate("participant", "name profileImage email clerkId")
       .sort({ createdAt: -1 })
       .limit(20);
-
-    if(!session){
-        return res.status(404).json({ message: "No active sessions found" });
-    }
    
-    res.status(200).json({ session });
+    res.status(200).json({ sessions });
   } catch (error) {
     console.log("Error fetching active session:", error);
     res.status(500).json({ message: "Error fetching active session" });
@@ -74,13 +71,13 @@ export async function getMyRecentSessions(req, res) {
   try {
     const userId = req.user._id;
     //where user is either host or participant
-    const session = await Session.find({
+    const sessions = await Session.find({
       status: "completed",
       $or: [{ host: userId }, { participants: userId }],
     })
       .sort({ createdAt: -1 })
       .limit(20);
-    res.status(200).json({ session });
+    res.status(200).json({ sessions });
   } catch (error) {
     console.log("Error fetching recent sessions:", error);
     res.status(500).json({ message: "Error fetching recent sessions" });
