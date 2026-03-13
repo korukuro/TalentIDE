@@ -1,6 +1,20 @@
 import { Code2, Clock, Users, Trophy, Loader } from "lucide-react";
 import { getDifficultyBadgeClass } from "../lib/utils";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, isValid } from "date-fns";
+
+const safeFormatDistance = (dateStr) => {
+  if (!dateStr) return "Unknown time";
+  const date = new Date(dateStr);
+  if (!isValid(date)) return "Unknown time";
+  return formatDistanceToNow(date, { addSuffix: true });
+};
+
+const safeFormatDate = (dateStr) => {
+  if (!dateStr) return "N/A";
+  const date = new Date(dateStr);
+  if (!isValid(date)) return "N/A";
+  return date.toLocaleDateString();
+};
 
 function RecentSessions({ sessions, isLoading }) {
   return (
@@ -50,9 +64,7 @@ function RecentSessions({ sessions, isLoading }) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="font-bold text-base mb-1 truncate">{session.problem}</h3>
-                      <span
-                        className={`badge badge-sm ${getDifficultyBadgeClass(session.difficulty)}`}
-                      >
+                      <span className={`badge badge-sm ${getDifficultyBadgeClass(session.difficulty)}`}>
                         {session.difficulty}
                       </span>
                     </div>
@@ -61,11 +73,7 @@ function RecentSessions({ sessions, isLoading }) {
                   <div className="space-y-2 text-sm opacity-80 mb-4">
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4" />
-                      <span>
-                        {formatDistanceToNow(new Date(session.createdAt), {
-                          addSuffix: true,
-                        })}
-                      </span>
+                      <span>{safeFormatDistance(session.createdAt)}</span> {/* ✅ safe */}
                     </div>
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4" />
@@ -78,9 +86,7 @@ function RecentSessions({ sessions, isLoading }) {
 
                   <div className="flex items-center justify-between pt-3 border-t border-base-300">
                     <span className="text-xs font-semibold opacity-80 uppercase">Completed</span>
-                    <span className="text-xs opacity-40">
-                      {new Date(session.updatedAt).toLocaleDateString()}
-                    </span>
+                    <span className="text-xs opacity-40">{safeFormatDate(session.updatedAt)}</span> {/* ✅ safe */}
                   </div>
                 </div>
               </div>
