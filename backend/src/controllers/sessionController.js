@@ -117,15 +117,19 @@ export async function joinSession(req, res) {
         return res.status(404).json({ message: "No active sessions found" });
     }
 
-    if(session.host._id.toString() === req.user._id.toString()){
+    if(session.host.toString() === req.user._id.toString()){
         return res.status(400).json({ message: "Host cannot join their own session as participant" });
     }
-    //check if session is already full
-    if (session.participant)
-      return res.status(409).json({ message: "Session is full" });
 
-    session.participant = userId;
-    await session.save();
+    const updatedSession = await Session.findOneAndUpdate(
+      { _id: id, status: "active", participant: null },
+      { participant: userId },
+      { new: true }
+    );
+
+    if (!updatedSession) {
+      return res.status(409).json({ message: "Session is full" });
+    }
 
     const channel = chatClient.channel("messaging", session.callId); //callid kese participant ko milega? answer: callid is generated when session is created and stored in session document in database so we can fetch it using session.callId
     await channel.addMembers([clerkId]);
