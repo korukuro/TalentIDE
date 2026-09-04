@@ -73,7 +73,7 @@ export async function getMyRecentSessions(req, res) {
     //where user is either host or participant
     const sessions = await Session.find({
       status: "completed",
-      $or: [{ host: userId }, { participants: userId }],
+      $or: [{ host: userId }, { participant: userId }],
     })
       .sort({ createdAt: -1 })
       .limit(20);
